@@ -77,6 +77,7 @@ _.extend(SubCollection.prototype, Events, underscoreMixins, {
         this.models = [];
         this.limit = undefined;
         this.offset = undefined;
+        this.filtered_length = undefined;
     },
 
     // internal method registering new filter function
@@ -137,7 +138,10 @@ _.extend(SubCollection.prototype, Events, underscoreMixins, {
         if (this.comparator) newModels = _.sortBy(newModels, this.comparator);
 
         // trim it to length
-        if (this.limit || this.offset) newModels = newModels.slice(offset, this.limit + offset);
+        if (this.limit || this.offset) {
+           this.filtered_length = newModels.length;
+           newModels = newModels.slice(offset, this.limit + offset);
+        }
 
         // now we've got our new models time to compare
         toAdd = _.difference(newModels, existingModels);
