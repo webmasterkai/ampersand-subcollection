@@ -88,6 +88,10 @@ The only thing that does *not* get cleared is your `comparator` method if you ha
 
 The subcollection maintains a read-only length property that simply proxies to the array length of the models it contains.
 
+### .filtered_length
+
+When `limit` or `offset` is set in the `config` object this property is set before the collection is sliced. This is helpful for determining how many "pages" are available when building a pager.
+
 ### all the underscore methods
 
 Since we're already depending on underscore for much of the functionality in this module, we also mixin underscore methods into the subcollection in the same way that Backbone does for collections.
