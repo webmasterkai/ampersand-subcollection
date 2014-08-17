@@ -77,6 +77,7 @@ _.extend(SubCollection.prototype, Events, underscoreMixins, {
         this.models = [];
         this.limit = undefined;
         this.offset = undefined;
+        this.comparator = undefined;
         this.filtered_length = undefined;
     },
 
