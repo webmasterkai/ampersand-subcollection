@@ -108,6 +108,7 @@ _.extend(SubCollection.prototype, Events, underscoreMixins, {
         }
         if (spec.hasOwnProperty('limit')) this.limit = spec.limit;
         if (spec.hasOwnProperty('offset')) this.offset = spec.offset;
+        this.loop = spec.loop || false;
         if (spec.filter) {
             this._addFilter(spec.filter, false);
         }
@@ -140,8 +141,20 @@ _.extend(SubCollection.prototype, Events, underscoreMixins, {
 
         // trim it to length
         if (this.limit || this.offset) {
-           this.filtered_length = newModels.length;
-           newModels = newModels.slice(offset, this.limit + offset);
+          this.filtered_length = newModels.length;
+          // pull items off the end of the list and put them on the front
+          if (offset < 0) {
+            newModels = newModels.slice(offset).concat(newModels.slice(0, offset))
+            offset = 0
+          }
+          endPoint = this.limit + offset
+          // take models off the front and put them on the back.
+          if (this.loop && newModels.length < endPoint) {
+            amountToAdd = endPoint - newModels.length
+            newModels = newModels.concat(newModels.slice(0, amountToAdd))
+          }
+          newModels = newModels.slice(offset, endPoint);
+
         }
 
         // now we've got our new models time to compare
